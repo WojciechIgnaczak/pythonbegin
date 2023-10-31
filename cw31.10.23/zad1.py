@@ -1,4 +1,4 @@
-#liczba w zakresie
+
 liczba= int(input("Podaj liczbe: "))
 if liczba >= 10 and liczba <= 50:
     print("twoja liczba jest w zakresie 10-50")

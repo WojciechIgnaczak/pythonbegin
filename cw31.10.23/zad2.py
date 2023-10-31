@@ -1,4 +1,4 @@
-#sprwawdz podzielnosc
+
 liczba = int(input("podaj liczbe: "))
 liczba2 = liczba %2
 liczba3 = liczba %3
