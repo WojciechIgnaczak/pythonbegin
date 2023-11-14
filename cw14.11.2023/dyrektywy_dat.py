@@ -10,3 +10,5 @@
 # %f mikrosekundy jako liczba z zerem wiodącym od 000000 do 999999
 #itd. wiecej na stronie w slack
 # każda może byc użyta w metodzie strftime( ) do formatowania obiektu datetime w python lub w metodzie strptime() do parsowania stringu w celu utwozenia obiektu datetime
+#strona do dyrektyw dat
+https://man7.org/linux/man-pages/man3/strftime.3.html
