@@ -35,7 +35,7 @@ def edit(database,id,tytul=None,autor=None,rok=None):
         database[id]['tytul']= tytul
     if autor:
         database[id]['autor']= autor    
-      if rok:
+    if rok:
         database[id]['rok']= rok
 
 def book_list(base):
