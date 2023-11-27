@@ -52,7 +52,7 @@ print(f"dodane n dni i m tygodni do daty {add}")
 try:
     today= input("podaj date w formacie dd.mm.yyyy : ")
     today_date = datetime.datetime.strptime(today, '%d'"."'%m'"."'%Y')
-    today_new_date= today_date.strftime("%d""-""%m""-""%Y")
+    today_new_date= today_date.strftime("%Y""-""%m""-""%d")
     print(f"zmieniony format daty podanej przez uzytkownika: {today_new_date}")
 
    

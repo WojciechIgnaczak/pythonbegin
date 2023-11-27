@@ -28,7 +28,7 @@ print(now)
 
 #napisz program ktory sprawdza czy dany format daty jest prawidlowy
 'dd-mm-yyyy'
-todays_date=datetime .data.today()
+todays_date=datetime. data.today()
 print(todays_date)
 
 
