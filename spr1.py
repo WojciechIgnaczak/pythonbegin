@@ -64,3 +64,10 @@ display_phonebook()
 modify_entry("123456789","ania","987654321")
 remove_entry("123456789")
 display_phonebook()
+
+while True:
+    print("0. Exit")
+    choice = input("Enter yout choice:")
+    if choice == "0": 
+        print("Exit")
+        break
