@@ -58,12 +58,12 @@ def modify_entry(old_phone_number, new_name, new_phone_number):
             return True
     return
 
-read_phonebook()
-add_entry("deds", "123456789")
-display_phonebook()
-modify_entry("123456789","ania","987654321")
-remove_entry("123456789")
-display_phonebook()
+# read_phonebook()
+# add_entry("deds", "123456789")
+# display_phonebook()
+# modify_entry("123456789","ania","987654321")
+# remove_entry("123456789")
+# display_phonebook()
 
 while True:
     print("0. Exit")
