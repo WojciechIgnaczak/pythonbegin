@@ -47,5 +47,5 @@ nr = "Mój numer telefonu to 623-456-789."
 tel = re.search(r"\b[4-8][0-9]{2}-\d{3}-\d{3}", nr)
 print(tel)
 domeny="Odwiedz https://www.example.com i http://www.anotherexample.org"
-domain_names= re.findall(r'https?://www\.(\w+)',domeny)
+domain_names= re.findall(r'https?://www.(\w+)',domeny)
 print(domain_names)
