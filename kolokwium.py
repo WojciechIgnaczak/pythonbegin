@@ -4,7 +4,7 @@ phonebook= {}
 def czy_prawdziwy_istnieje(phone_number :str):
     if len(phone_number) != 9: return False
     for keys in phonebook.keys():
-        if phonebook[phone_number] == phonebook.keys(): return False
+        if phonebook[phone_number] == phonebook.values(): return False
         else: return True
     return True
 
@@ -24,8 +24,8 @@ def add_entry(name:str, phone_number:str):
     if czy_prawdziwy_istnieje(phone_number) == True:
         with open(path, 'a') as file:
             dict= {name  : phone_number}
-            new_phone= phonebook.update(dict)
-            file.write(f"{new_phone}/n")
+            phonebook.update(dict)
+            file.write(f"{phonebook}\n")
     else: print('zly numer')
     
 def remove_entry(phone_number:str):
