@@ -23,7 +23,8 @@ def display_phonebook(path):
 def add_entry(name:str, phone_number:str):
     if czy_prawdziwy_istnieje(phone_number) == True:
         with open(path, 'a') as file:
-            new_phone= phonebook.update(phone_number, name)
+            dict= {name  : phone_number}
+            new_phone= phonebook.update(dict)
             file.write(f"{new_phone}/n")
     else: print('zly numer')
     
@@ -35,3 +36,5 @@ def modify_entry(old_phone_number:str, new_name:str, new_phone_number:str):
     with open(path, 'a') as file:
         phonebook[old_phone_number]= new_name
         old_phone_number= new_phone_number
+add_entry('name','123456789')
+save_phonebook('book.txt')
