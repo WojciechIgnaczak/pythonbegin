@@ -7,7 +7,7 @@
 # Generowanie podsumowania (np. łącznych wydatków i przychodów).
 # Wyświetlanie historii transakcji.
 #[[przychod,1000],[wydatek,1000]]
-FILE_PATH = 'budzet.txt'
+
 from datetime import datetime
 import math
 def read():
@@ -22,7 +22,7 @@ def read():
 
 def dodaj():
     budzet=read()
-    przychod_wydatek= input("wydatek czy przychod: ")
+    przychod_wydatek= input("wydatek czy przychod(wpisz odpowiednie slowo): ")
     data=datetime.now()
     new_date=data.strftime("%Y.%m.%d")
     if przychod_wydatek=='przychod' or przychod_wydatek=="wydatek":
@@ -32,7 +32,7 @@ def dodaj():
                 nowy_przychod=['przychod',ile,new_date]
                 budzet.append(nowy_przychod)
             elif przychod_wydatek=='wydatek':
-                    ile=float(input("podaj wydales: "))
+                    ile=float(input("podaj ile wydales: "))
                     nowy_przychod=['wydatek',ile,new_date]
                     budzet.append(nowy_przychod)
         except:
@@ -47,7 +47,8 @@ def zapis():
     with open(FILE_PATH,'w') as file:
         for i in budzet:
             file.write(f"{i[0]};{i[1]};{i[2]}\n")
-
+    print("Zapisano.")
+    
 def historia():
     print("---HISTORIA---")
     budzet=read()
@@ -70,7 +71,21 @@ def podsumowanie():
     bilans= przychod - wydatek
     print("---PODSUMOWANIE---")
     print(f"Przychody: {przychod}zl\nWydatki: {wydatek}zl\nBilans: {bilans}zl")
-    
-zapis()
-historia()
-podsumowanie()
+
+FILE_PATH = 'budzet.txt'   
+
+while True:
+    print("\nCo robić?\n1.Zapisz nowy wydatek/przychod.\n2.Wyświetl historie.\n3.Wyświetl bilans.\n4.Wyjdź")
+    what=input("Podaj odpowiednią liczbe:")
+    if what == '1':
+        zapis()
+    elif what == '2':
+        historia()
+        
+    elif what == '3':
+        podsumowanie()
+
+    elif what =='4':
+        print("Koniec")
+        break    
+    else: break
