@@ -17,7 +17,7 @@ class Dentistbook:
         except FileNotFoundError:
             return False
 
-    def get_appointment_from_file(file_path):
+    def get_appointment_from_file(self,file_path):
         #wczystuje zapisane wizyty w pliku
         if self.check_file_exist(file_path):
             with open(file_path,'r') as file:
@@ -42,7 +42,7 @@ class Dentistbook:
         else: 
             return False
         
-    def save_appointment(file_path,phonenumber,date,time):
+    def save_appointment(self,file_path,phonenumber,date,time):
         #zapisuje nowa wizyte jesli numer telefonu i data sa poprawbe
         if not self.validate_number(phonenumber):
             print("zly numer")
@@ -60,7 +60,7 @@ class Dentistbook:
         return True
 
 
-    def show_available_hours(appointments, date):
+    def show_available_hours(self,appointments, date):
         if not self.check_availability(appointments,date):
             print("wszystkie godziny zajete")
             return 
