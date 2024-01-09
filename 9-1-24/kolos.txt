@@ -1,0 +1,4 @@
+pisanie klas
+logi
+pisanie testów
+dokumentacja
