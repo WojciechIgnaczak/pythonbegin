@@ -7,4 +7,4 @@ class Circle:
 circle=Circle(10)
 circle.radius=3
 pole=circle.calculate()
-print(pole)
+print(pole) #pole
