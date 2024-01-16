@@ -25,7 +25,7 @@ class Car:
         logging.info(f"Marka: {self.__make}")
         logging.info(f"Model: {self.__model}") 
         logging.info(f"Rocznik: {self.__year}")
-        logging.info(f"Produkcja: {"Tak" if self.__is_production else "nie"}")
+        logging.info(f"Produkcja: {"Tak" if self.is_production else "nie"}")
     
 class ElektricalCar(Car):#dziedziczenie klasy
     def __init__(self, make, model, year, battery_capacity):

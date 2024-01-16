@@ -16,4 +16,4 @@ def test_car(get_car):
 
 def test_car_start_production(get_car):
     get_car.start_production()
-    assert get_car.is_production ==True
+    assert get_car.is_production is True
