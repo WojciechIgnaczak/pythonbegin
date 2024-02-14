@@ -1,1 +1,0 @@
-from phonebook.main import phonebook
