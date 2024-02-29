@@ -1,22 +1,42 @@
-list=[1,2,5,4,3,6,7,8]
-n=len(list)//2
-new1=list[0:n]
-new2=list[n:]
-new_list=[]
-for i in range(0,n-1):
-    if new1[0]<new2[0]:
-        new_list.append(new1[0])
-        new1.pop(0)
-    else:
-        new_list.append(new2[0])
-        new2.pop(0)
-if len(new1)==1:
-    new_list.append(new1[0])
-    new1.pop(0)
-else:
-    new_list.append(new2[0])
-    new2.pop(0) 
-            
-print(new_list)
+#podziel tablice na 2 do momentu az wszystkie beda mialy po 2 elementy.
+#posortuj wszystkie tablice 2 elementowe
+#scalaj posortowane tablice
 
-#zrob sortowanie przez scalanie
+def dziel(lista)->list: #dzielenie listy na 2 elementowe i sortowanie ich
+    if len(lista)>2:
+        n=len(lista)//2
+        right_site=lista[:n]
+        left_site=lista[n:]
+        return scal(dziel(right_site),dziel(left_site))
+    if len(lista)==2:
+        if lista[0]>lista[1]:
+            lista[0],lista[1]=lista[1],lista[0]
+    return lista
+
+
+def scal(half1,half2):
+    newlist=[]
+    n=len(half1)+len(half2)
+    for i in range(n):
+        if half1[0]<half2[0]:
+            newlist.append(half1[0])
+            half1.pop(0)
+        else:
+            newlist.append(half2[0])
+            half2.pop(0)
+        if len(half1)==0:
+            for i in range(len(half2)):
+                newlist.append(half2[i])
+            break
+        if len(half2)==0:
+            for i in range(len(half1)):
+                newlist.append(half1[i])
+            break
+    return newlist
+
+
+lista=[38, 27, 43, 3, 9, 82, 10,1,3,67,2,5,2,5,6,2,1,7,2,45,24,43,5,23,2,53,42,54]
+x=dziel(lista)
+print(x)
+y=sorted(lista)
+print(y)
