@@ -1,4 +1,4 @@
-
+#sortowanie przez wstawianie
 import time
 import random
 
@@ -14,7 +14,7 @@ def insert_sort(lista):
             t-=1
             lista[t+1]=temp
     return lista
-ile_liczb=100000
+ile_liczb=10000
 lista=[random.randint(1,100) for i in range(ile_liczb)]
 start_time=time.time()
 insert_sort(lista)
