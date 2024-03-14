@@ -36,17 +36,15 @@ def scal(half1,half2):# scalanie 2 list
     return newlist
 
 
-# lista=[38, 27, 43, 3, 9, 82, 10,1,3,67,2,5,2,5,6,2,1,7,2,45,24,43,5,23,2,53,42,54]
-# x=dziel(lista)
-# print(x)
-# y=sorted(lista)
-# print(y)
+lista=[38, 27, 43, 3, 9, 82, 10,1,3,67,2,5,2,5,6,2,1,7,2,45,24,43,5,23,2,53,42,54]
+x=dziel(lista)
+print(x)
 
 
-ile_liczb=10000
-lista=[random.randint(1,100) for i in range(ile_liczb)]
-start_time=time.time()
-dziel(lista)
-end_time=time.time()
-czas=end_time-start_time
-print(f"Czas sortowania dla {ile_liczb} liczb wynosi: {round(czas,6)}")
+# ile_liczb=10000
+# lista=[random.randint(1,100) for i in range(ile_liczb)]
+# start_time=time.time()
+# dziel(lista)
+# end_time=time.time()
+# czas=end_time-start_time
+# print(f"Czas sortowania dla {ile_liczb} liczb wynosi: {round(czas,6)}")
