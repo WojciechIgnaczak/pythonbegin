@@ -10,6 +10,9 @@ SORT. NIESTABILNE
 sort szybkie,przez wybor,przez kopcowanie
 '''
 # dodaj widok dodaj typy numery telefonu, godziny otwarcia, haslo, email,bool
+# algorytmy na wtorek sortowania(wstawianie,szybkie,scalanie,bąbelkowe)
+#schemat bazodanowy: temat-pytania-odpowiedzi-ktobierzeudzial-jakie ma odpowiedz-wskazalbledy-zlicz punkty-progres,historyczzne dane
+#pula pytan a do testu moze byc dana ilosc
 
 lista=[{'id':1,'value':5},
  {'id':2,'value':3},
