@@ -207,9 +207,8 @@ n=3
 t=3
 def procent_skladany(p,r,n,t):
     kapital=p
-    for i in range(t):
-        p= p * (1+r)**n
-    kwota_koncowa=round(p,2)
+    k= p * (1+(r/(100*n)))**(n*t)
+    kwota_koncowa=round(k,2)
     zysk=kwota_koncowa-kapital
     print(f"Czas trwania: {t} lata, Oprocentowanie: {r},Kapitał: {kapital}, Kwota końcowa: {kwota_koncowa}, Zysk: {round(zysk,2)}") 
 procent=procent_skladany(p,r,n,t)
