@@ -416,19 +416,19 @@ CREATE TYPE My_number FROM INT;
 
 # INDEKSY
 -- klastrowe- sortują i przechowują faktyczne dane w tabeli w określonym porządku.uporządkowana według wartości klucza głównego
-CREATE CLUSTERED INDEX IX_ClusteredIndex ON TableName (PrimaryKeyColumn);
+CREATE CLUSTERED INDEX IX_ClusteredIndexName ON TableName (PrimaryKeyColumn);
 
 -- nieklastrowe-Służą do przyspieszania wyszukiwania danych na podstawie innych kolumn niż klucz główny
-CREATE NONCLUSTERED INDEX IX_NonClusteredIndex ON TableName (IndexedColumn);
+CREATE NONCLUSTERED INDEX IX_NonClusteredIndexName ON TableName (IndexedColumn);
 
 -- pełnotekstowe- stosowane do przyspieszania zapytań, które zawierają operatory pełnotekstowe
-CREATE FULLTEXT INDEX IX_FullTextIndex ON TableName (TextField);
+CREATE FULLTEXT INDEX IX_FullTextIndexName ON TableName (TextField);
 
 -- przestrzenne- Indeksy przestrzenne są używane do obsługi danych przestrzennych, takich jak mapy, geometria, GPS
-CREATE SPATIAL INDEX IX_SpatialIndex ON TableName (GeometryColumn);
+CREATE SPATIAL INDEX IX_SpatialIndexName ON TableName (GeometryColumn);
 
 -- kolumnowe- dla dużej ilości danych, stosowane w bazach danych kolumnowych, gdzie dane są przechowywane w postaci kolumnowej, a nie wierszowej.
-CREATE COLUMNSTORE INDEX IX_ColumnIndex ON TableName (IndexedColumn1, IndexedColumn2);
+CREATE COLUMNSTORE INDEX IX_ColumnIndexName ON TableName (IndexedColumn1, IndexedColumn2);
 
 
 # TWORZENIE UŻYTKOWNIKÓW
