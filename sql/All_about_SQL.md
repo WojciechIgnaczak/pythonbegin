@@ -250,6 +250,59 @@ REPLACE(Notes, 'old_text', 'new_text') -- zamienia w kolumnie Notes, old_text na
 LEFT() / RIGHT(): Zwraca określoną liczbę znaków z lewej (LEFT) lub prawej (RIGHT) strony ciągu
 SELECT RIGHT(Description, 15) AS RightPart --zwraca 15 znaków z prawej strony
 
+# FUNCKJE NUMERYCZNE
+--SUM(): Służy do sumowania wartości w określonych kolumnach.
+SELECT SUM(column_name) FROM table_name;
+
+--AVG(): Oblicza średnią wartość w określonych kolumnach.
+SELECT AVG(column_name) FROM table_name;
+
+--COUNT(): Zlicza liczbę wierszy w wyniku zapytania.
+SELECT COUNT(column_name) FROM table_name;
+
+--MIN(): Zwraca najmniejszą wartość w określonych kolumnach.
+SELECT MIN(column_name) FROM table_name;
+
+--MAX(): Zwraca największą wartość w określonych kolumnach.
+SELECT MAX(column_name) FROM table_name;
+
+--ROUND(): Zaokrągla wartość do określonej liczby miejsc po przecinku.
+SELECT ROUND(column_name, 2) FROM table_name;
+
+--ABS(): Zwraca wartość bezwzględną liczby.
+SELECT ABS(column_name) FROM table_name;
+
+--POWER(): Podnosi liczbę do określonej potęgi.
+SELECT POWER(column_name, 2) FROM table_name;
+
+--SQRT(): Oblicza pierwiastek kwadratowy liczby.
+SELECT SQRT(column_name) FROM table_name;
+
+--CEILING(): Zaokrągla wartość do najbliższej liczby całkowitej w górę.
+SELECT CEILING(column_name) FROM table_name;
+
+--FLOOR(): Zaokrągla wartość do najbliższej liczby całkowitej w dół.
+SELECT FLOOR(column_name) FROM table_name;
+
+--SIGN(): Zwraca znak liczby (-1 dla wartości ujemnych, 0 dla zera, 1 dla wartości dodatnich).
+SELECT SIGN(column_name) FROM table_name;
+
+--RAND(): Zwraca pseudolosową liczbę zmiennoprzecinkową między 0 a 1.
+SELECT RAND();
+
+--LOG(): Oblicza logarytm naturalny z danej liczby.
+SELECT LOG(column_name) FROM table_name;
+
+--EXP(): Podnosi liczbę e do potęgi danej liczby.
+SELECT EXP(column_name) FROM table_name;
+
+--DEGREES(): Konwertuje wartość kątową wyrażoną w radianach na stopnie.
+SELECT DEGREES(column_name) FROM table_name;
+
+--RADIANS(): Konwertuje wartość kątową wyrażoną w stopniach na radiany.
+SELECT RADIANS(column_name) FROM table_name;
+
+
 # HAVING
 --Pozwala to na stosowanie warunków do wyników agregacji, co umożliwia bardziej szczegółowe filtrowanie danych niż możliwe jest w samym WHERE
 SELECT DepartmentID, COUNT(EmployeeID) AS NumberOfEmployees
@@ -335,6 +388,7 @@ WHERE EXISTS (SELECT * FROM table2 WHERE condition);
 select nazwa,
     coalesce(opis,'brak opisu') as opisproduktu
 from produkty
+
 # DATA I CZAS
 -- biezaca data
 select getdate() as aktualna_data_i_czas 
@@ -437,7 +491,33 @@ CREATE SPATIAL INDEX IX_SpatialIndexName ON TableName (GeometryColumn);
 -- kolumnowe- dla dużej ilości danych, stosowane w bazach danych kolumnowych, gdzie dane są przechowywane w postaci kolumnowej, a nie wierszowej.
 CREATE COLUMNSTORE INDEX IX_ColumnIndexName ON TableName (IndexedColumn1, IndexedColumn2);
 
+# MASKOWANIE
+-- dodawanie maski
+ALTER TABLE nazwaTabeli
+ALTER COLUMN nazwaKolumny ADD MASKED WITH (FUNCION= 'default()') --maskowanie kolumny 123456789-> xxxx
 
+ALTER TABLE nazwaTabeli
+ALTER COLUMN nazwaKolumny ADD MASKED WITH (FUNCION= 'email()') -- jankowalski@gmail.com -> XXX@XXXX.com
+
+ALTER TABLE nazwaTabeli
+ALTER COLUMN nazwaKolumny ADD MASKED WITH (FUNCION= 'random(100,10000)') --zastępuje maskowaną komórke liczbami od 100 do 10000, 987654321-> 909
+
+ALTER TABLE nazwaTabeli
+ALTER COLUMN nazwaKolumny ADD MASKED WITH (FUNCION= 'partian(3,"X",1)')-- zastępuje komórke tak, że widać 3 piersze znaki i jeden ostatni, a    reszte zastępuje "X"
+
+
+-- usuwanie maski
+ALTER TABLE nazwaTabeli
+ALTER COLUMN nazwaKolumny DROP MASKED
+
+-- uprawnienia do odmaskowania danych
+GRANT UNMASK  ON nazwaTabeli(nazwaKolumny) FROM nazwaBazyDanych TO nazwaUsera
+
+REVOKE UNMASK ON nazwaTabeli(nazwaKolumny) FROM nazwaBazyDanych TO nazwaUsera
+
+
+# ################################################################################################################################################
+#                                           ADMINISTRACJA
 # TWORZENIE UŻYTKOWNIKÓW
 ## TWORZENIE NOWYCH LOGINÓW
 CREATE LOGIN MyName WITH PASSWORD = 'YourPassword'; -- Tworzy nowe logowanie AdventureWorksLogin z hasłem

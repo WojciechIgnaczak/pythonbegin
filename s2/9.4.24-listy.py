@@ -46,12 +46,12 @@ class SinglyLinkedList:
         print("Wartosc nie istnieje")
               
 
-# lista= SinglyLinkedList()
-# lista.append(1)
-# lista.append(2)
-# lista.append(3)
-# lista.display_all()
-# lista.display(2)
+lista= SinglyLinkedList()
+lista.append(1)
+lista.append(2)
+lista.append(3)
+lista.display_all()
+lista.display(2)
 
 
 
@@ -114,12 +114,12 @@ class TwoLinkedList:
         print("Wartosc nie istnieje")
         
         
-# lista2= TwoLinkedList()
-# lista2.append(1)
-# lista2.append(2)
-# lista2.append(3)
-# lista2.display_all()
-# lista2.display(1)
+lista2= TwoLinkedList()
+lista2.append(1)
+lista2.append(2)
+lista2.append(3)
+lista2.display_all()
+lista2.display(1)
 
 
 
@@ -128,7 +128,7 @@ class TwoLinkedList:
 # list() - lista zachowuje sie jako tablica samorozszerzająca, umozliwia dynamiczne dodawanie i usuwanie elementów bez koniecznosci recznego alokowania pamieci
 # listy moga zawierac wartosci roznych typow i automatycznie dostosuwuja swoj rozmiar
 # dzialaja tak ze alokuja dodatkowa pamiec gdy rozmiar przekoczy jej aktualna pojemnosc
-# # gdy tak jest to pysthon alokuje nowa wieksza tablice i kopiuje a stara liste usuwa
+#  gdy tak jest to pysthon alokuje nowa wieksza tablice i kopiuje a stara liste usuwa
 # zalety: elastycznosc,prostota,wydajnosc
 # wadyL: koszt kopiowania, nieprzewidywania wydajnosc
 # moja_lista=[]
