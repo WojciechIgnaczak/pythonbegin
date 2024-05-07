@@ -21,7 +21,7 @@ create procedure changeadress
 	@newadress nvarchar(50) 
 as
 begin
-	update HumanResources.EmployeeAddress
+	update Person.Adress
 	set Adress= @newadress
 	where CustomerID = @CustomerID
 end;
@@ -43,10 +43,45 @@ begin
 	select @yearsalary as Roczne_Wynagrodzenia
 
 end;
+-- procedura usuwajaca klienta z jego zamówieniami:
+-- stworz procedure ktora usuwa klienta z bazy wraz z wszystkimi powiązanymi zamówieniami znajdującymi sie w sales.salesorderheader
+create procedure deleteCustomer
+	@CustomerID int
+as
+begin
+	delete from Sales.SalesOrderHeader where CustomerID=@CustomerID
+	delete from Sales.Customer where CustomerID=@CustomerID
+end
 
+--procedura generujaca raport dla okreslonego okres:
+-- procedura ktora gneruje raport o sprzedazy dla okreslonego czasu, zwracając sume sprzedaży dla kazdego produktu w danym okresie
+create procedure raportsprzedazy
+	@start_date date
+	@end_date date
+as
+begin
+select sod.ProductID,pp.Name,sum(sod.UnitPrice) kasa from Sales.SalesOrderDetail sod
+join Sales.SalesOrderHeader soh on soh.SalesOrderID =sod.SalesOrderID
+inner join Production.Product pp on pp.ProductID =sod.ProductID
+where soh.OrderDate between @start_date and @end_date
+group by sod.ProductID,pp.Name
+order by kasa desc
+end
 
+-- procedura analizująca stan magazynowy po dodaniu nowej dostawy:
+--procedura ktora po dodaniu nowej dostawy aktualizuje stan magazynowy produktow w tabeli Production.ProductInventory
+drop procedure aktstanmagz
 
-
+create procedure aktstanmagz
+	@ProductID int,
+	@Quantity smallint,
+	@locaction int
+	as
+begin
+	update Production.ProductInventory
+	set Quantity = @Quantity
+	where ProductID= @ProductID and LocationID=@locaction
+end
 
 --Funkcje skalarne:
 
@@ -129,6 +164,15 @@ end;
 
     --Trigger archiwizujący dane klientów:
       --  Stwórz trigger, który po usunięciu rekordu klienta z tabeli Sales.Customer, przenosi ten rekord do tabeli Sales.ArchivedCustomers w celu archiwizacj
+	CREATE TABLE [Sales].[Customer](
+	[CustomerID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[PersonID] [int] NULL,
+	[StoreID] [int] NULL,
+	[TerritoryID] [int] NULL,
+	[AccountNumber]  AS (isnull('AW'+[dbo].[ufnLeadingZeros]([CustomerID]),'')),
+	[rowguid] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+)
 create trigger archive on Sales.Customer
 after delete
 as
@@ -136,3 +180,36 @@ begin
 	insert into Sales.ArchivedCustomers
 	select * from deleted
 end;
+
+
+-- trigger automatycznie aktualizujacy date modyfikacji rekorduL
+-- aktualizuje modyfikacje rekordu w tabeli humanresources.employee za kazdym razem gdy zostanie zmieniony jakikolwiek rekord
+create trigger aktdata on HumanResources.Employee
+after update
+as
+begin
+	update HumanResources.Employee
+	set ModifiedDate=getdate()
+	where BusinessEntityID in (select BusinessEntityID from inserted) or  BusinessEntityID in (select BusinessEntityID from deleted)
+end
+
+
+-- trigger sprawdzajacy poprawnosc danych podczas dosawania nowego produktu no czy cena jest >0 , nazwa jest unikalnka
+use AdventureWorks2019
+go
+create trigger poprawnoscdanych on Production.Product
+after insert
+as
+begin
+	declare @price money
+	declare @name nvarchar(50)
+	select @price= ListPrice, @name = Name from inserted
+	IF EXISTS (SELECT Name FROM Production.Product WHERE Name = @name AND ProductID != (SELECT ProductID FROM inserted))
+	begin
+		rollback transaction
+	end
+	if @price >0
+	begin
+		rollback transaction
+	end
+end
