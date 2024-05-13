@@ -50,10 +50,12 @@ while start<n:
             liczby.remove(liczba)
 print(liczby)
 ```
+
 # W2. Problem sortowania. Przykłady naiwnych algorytmów sortowania. Technika "dziel i rządź", sortowanie przez scalanie.
 Sortowanie polega na uporządkowaniu elementów zbioru według ustalonego kryterium, na przykład rosnąco lub malejąco.
 
 ## Sortowanie bąbelkowe
+Pomimo swojej niskiej wydajności, może być używane do sortowania małych zbiorów danych, gdzie inne bardziej zaawansowane algorytmy mogą być nadmiernie skomplikowane.
 ```
 def bubble_sort(arr):
     n = len(arr)
@@ -67,6 +69,8 @@ bubble_sort(arr)
 print(arr)  # Wynik: [11, 12, 22, 25, 34, 64, 90]
 ```
 ## Sortowanie przez wybieranie
+Proste zastosowania: Jest prosty do zrozumienia i implementacji, co czyni go dobrym wyborem dla prostych zastosowań lub w przypadku niewielkich zbiorów danych.
+Sortowanie małych zbiorów danych: Pomimo swojej niskiej wydajności, może być używany do sortowania małych zbiorów danych, gdzie inne bardziej zaawansowane algorytmy mogą być nadmiernie skomplikowane.
 ```
 def selection_sort(arr):
     n = len(arr)
@@ -80,8 +84,86 @@ arr = [64, 34, 25, 12, 22, 11, 90]
 selection_sort(arr)
 print(arr)  # Wynik: [11, 12, 22, 25, 34, 64, 90]
 ```
+## Sortowanie przez wstawianie (insert)
+Sortowanie przez wstawianie jest skuteczne dla małych zbiorów danych lub już prawie posortowanych danych. Jest też używane jako część innych algorytmów sortowania.
+```
+import time
+import random
+
+#lista=[2,5,5,3,5,1,89,3,5,2]
+
+def insert_sort(lista):
+    number=len(lista)
+    for i in range(1,number):
+        temp=lista[i]
+        t=i-1
+        while t>=0 and lista[t]>temp:
+            lista[t+1]=lista[t]
+            t-=1
+            lista[t+1]=temp
+    return lista
+ile_liczb=10000
+lista=[random.randint(1,100) for i in range(ile_liczb)]
+start_time=time.time()
+insert_sort(lista)
+end_time=time.time()
+czas=end_time-start_time
+print(f"Czas sortowania dla {ile_liczb} liczb wynosi: {round(czas,6)}")
+```
+## Sortowanie przez zliczanie
+Sortowanie przez zliczanie (Counting Sort) jest szczególnie skuteczne, gdy mamy do czynienia z dużą liczbą powtarzających się elementów w ograniczonym zakresie
+```
+lista=[1,32,4,2,4,2,45,5,6,45,6,57,34,6,7,7,4,5,53,34,3]
+def sort_scal(lista):
+    maximum=max(lista)
+    ilosc=maximum+1
+    tablica=[0]*ilosc
+    for i in lista:
+        tablica[i]+=1
+    posortowana = []
+    for i in range(ilosc):
+        posortowana.extend([i] * tablica[i])
+    return posortowana
+print(sort_scal(lista))
+```
+## Sortowanie kubełkowe
+Najlepiej działa, gdy dane wejściowe są równomiernie rozłożone w zakresie. Jest używany w sytuacjach, gdzie zakres danych jest znany i niezbyt duży.
+Sortowanie z dużą ilością danych: Jest efektywny, gdy mamy do czynienia z dużą ilością danych, które można podzielić na wiele kubełków, co pozwala na równoległe sortowanie.
+```
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
+def bucket_sort(arr):
+    n = len(arr)
+    buckets = [[] for _ in range(n)]
+
+    # Umieszczamy każdy element w odpowiednim kubełku
+    for num in arr:
+        index = int(num * n)
+        buckets[index].append(num)
+
+    # Sortujemy zawartość każdego kubełka
+    for bucket in buckets:
+        insertion_sort(bucket)
+
+    # Łączymy posortowane kubełki
+    sorted_arr = [num for bucket in buckets for num in bucket]
+    return sorted_arr
+
+# Przykładowe użycie
+arr = [0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23]
+sorted_arr = bucket_sort(arr)
+print("Posortowana lista:", sorted_arr)
+```
+
 ## Technika "dziel i rządź", sortowanie przez scalanie:
-Sortowanie przez scalanie jest efektywnym algorytmem sortowania, który stosuje technikę "dziel i rządź", dzieląc listę na mniejsze części, sortując je, a następnie łącząc w jedną posortowaną listę.
+Sortowanie przez scalanie jest efektywnym algorytmem sortowania, który stosuje technikę "dziel i rządź", dzieląc listę na mniejsze części, sortując je, a następnie łącząc w jedną posortowaną listę. Doskonale sprawdza się w przypadku sortowania list lub tablic o dużych rozmiarach.
 ```
 def merge_sort(arr):
     if len(arr) > 1:
@@ -119,9 +201,12 @@ merge_sort(arr)
 print(arr)  # Wynik: [11, 12, 22, 25, 34, 64, 90]
 
 ```
+
+
 # W3. Sortowanie szybkie. Najgorsze przypadki i sposoby ich zapobiegania.
 ## Sortowanie szybkie (quicksort):
-Quicksort to algorytm sortowania, który wybiera element referencyjny (zazwyczaj ostatni element w liście) i dzieli resztę elementów na dwie grupy: te mniejsze i większe od elementu referencyjnego, a następnie rekursywnie sortuje obie grupy.
+Quicksort to algorytm sortowania, który wybiera element referencyjny (zazwyczaj ostatni element w liście) i dzieli resztę elementów na dwie grupy: te mniejsze i większe od elementu referencyjnego, a następnie rekursywnie sortuje obie grupy. Quick Sort jest jednym z najszybszych algorytmów sortowania dla typowych zbiorów danych. Jest wydajny dla dużych zbiorów danych, dzięki swojej złożoności czasowej O(n log n) w przypadku średnim.
+Systemy baz danych: Quick Sort jest często używany w systemach baz danych do sortowania wyników zapytań, sortowania indeksów, czy nawet wewnętrznych operacji sortowania w bazach danych.
 
 ## Najgorsze przypadki i sposoby ich zapobiegania:
 Najgorszym przypadkiem dla quicksorta jest sytuacja, gdy zawsze wybieramy najmniejszy lub największy element jako element referencyjny, co prowadzi do niemal kwadratowej złożoności czasowej. Możemy temu zapobiec, losując element referencyjny lub używając techniki "trzy środki".
@@ -138,7 +223,6 @@ def quicksort(lista):
 
 print(quicksort(lista))
 ```
-
 # W4. Sortowanie stabilne. Sortowanie zbiorów o ograniczonym zakresie wartości.
 Sortowanie stabilne:
 Sortowanie stabilne zachowuje kolejność równych elementów w oryginalnej liście. Jest to przydatne w przypadku, gdy chcemy sortować po wielu kryteriach.
@@ -148,21 +232,47 @@ W przypadku, gdy mamy do czynienia z małym zbiorem możliwych wartości, możem
 
 ### Sortowania stabilne:
 
--scalanie
+#### Sortowanie przez scalanie (Merge Sort):
 
--wstawianie
+-Średnia i najgorsza złożoność czasowa: O(n log n)
 
--bąbelkowe
+-Najlepsza złożoność czasowa: O(n log n)
 
--kubełkowe
+#### Sortowanie przez wstawianie (Insertion Sort):
 
--zliczanie
+-Średnia i najgorsza złożoność czasowa: O(n^2)
+
+-Najlepsza złożoność czasowa: O(n), gdy dane są już posortowane
+
+#### Sortowanie bąbelkowe (Bubble Sort):
+
+-Średnia i najgorsza złożoność czasowa: O(n^2)
+
+-Najlepsza złożoność czasowa: O(n), gdy dane są już posortowane
+
+#### Sortowanie kubełkowe (Bucket Sort):
+
+-Średnia złożoność czasowa: O(n + k), gdzie k jest liczbą kubełków
+
+-Najgorsza złożoność czasowa: O(n^2), gdy wszystkie elementy trafią do jednego kubełka
+
+-Najlepsza złożoność czasowa: O(n + k), gdy dane są równomiernie rozłożone po kubełkach
+#### Sortowanie przez zliczanie (Counting Sort):
+Złożoność czasowa: O(n + k), gdzie k jest zakresem danych
+Jest liniowym algorytmem sortowania, ale może wymagać dużo pamięci w zależności od zakresu danych.
 
 ### Sortowania niestabilne:
 
--szybkie
+#### Sortowanie szybkie (Quick Sort):
+Średnia złożoność czasowa: O(n log n)
 
--przez wybieranie
+Najgorsza złożoność czasowa: O(n^2), gdy pivot jest zawsze najmniejszy lub największy element
+
+Najlepsza złożoność czasowa: O(n log n), gdy pivoty są dobrze wyważone
+
+#### Sortowanie przez wybieranie (Selection Sort):
+
+Średnia, najgorsza i najlepsza złożoność czasowa: O(n^2)
 
 # W5. Problemy optymalizacyjne. Algorytmy zachłanne.
 Problemy optymalizacyjne:
@@ -234,21 +344,191 @@ def algorytm_dijkstry(graph,start,goal):
 path, distance= algorytm_dijkstry(mapa,'A','E')
 print(f"sciezka: {path}, dlugosc: {distance}")
 ```
+```
+# Algorytm Kruskala
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = []
+
+    def add_edge(self, u, v, w):
+        self.graph.append([u, v, w])
+
+    def find(self, parent, i):
+        if parent[i] == i:
+            return i
+        return self.find(parent, parent[i])
+
+    def union(self, parent, rank, x, y):
+        xroot = self.find(parent, x)
+        yroot = self.find(parent, y)
+
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+
+    def kruskal(self):
+        result = []
+        i = 0
+        e = 0
+
+        self.graph = sorted(self.graph, key=lambda item: item[2])
+        parent = []
+        rank = []
+
+        for node in range(self.V):
+            parent.append(node)
+            rank.append(0)
+
+        while e < self.V - 1:
+            u, v, w = self.graph[i]
+            i += 1
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+
+            if x != y:
+                e += 1
+                result.append([u, v, w])
+                self.union(parent, rank, x, y)
+
+        minimum_cost = 0
+        print("Minimalne drzewo rozpinające:")
+        for u, v, weight in result:
+            print(f"Krawędź {u} - {v}, waga: {weight}")
+            minimum_cost += weight
+        print("Minimalny koszt:", minimum_cost)
+
+
+# Przykładowe użycie:
+g = Graph(4)
+g.add_edge(0, 1, 10)
+g.add_edge(0, 2, 6)
+g.add_edge(0, 3, 5)
+g.add_edge(1, 3, 15)
+g.add_edge(2, 3, 4)
+
+g.kruskal()
+
+```
+```
+# Algorytm Prima
+import sys
+
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = [[0 for _ in range(vertices)] for _ in range(vertices)]
+
+    def min_key(self, key, mst_set):
+        min_val = sys.maxsize
+        min_index = None
+
+        for v in range(self.V):
+            if key[v] < min_val and not mst_set[v]:
+                min_val = key[v]
+                min_index = v
+
+        return min_index
+
+    def prim(self):
+        parent = [None] * self.V
+        key = [sys.maxsize] * self.V
+        key[0] = 0
+        mst_set = [False] * self.V
+
+        parent[0] = -1
+
+        for _ in range(self.V):
+            u = self.min_key(key, mst_set)
+            mst_set[u] = True
+
+            for v in range(self.V):
+                if self.graph[u][v] > 0 and not mst_set[v] and key[v] > self.graph[u][v]:
+                    key[v] = self.graph[u][v]
+                    parent[v] = u
+
+        self.print_mst(parent)
+
+    def print_mst(self, parent):
+        print("Minimalne drzewo rozpinające:")
+        for i in range(1, self.V):
+            print(f"Krawędź {parent[i]} - {i}, waga: {self.graph[i][parent[i]]}")
+
+
+# Przykładowe użycie:
+g = Graph(5)
+g.graph = [
+    [0, 2, 0, 6, 0],
+    [2, 0, 3, 8, 5],
+    [0, 3, 0, 0, 7],
+    [6, 8, 0, 0, 9],
+    [0, 5, 7, 9, 0]
+]
+
+g.prim()
+
+```
+
 # W6. Programowanie dynamiczne. Problem plecakowy, problem wydawania reszty.
 ### Programowanie dynamiczne:
 Programowanie dynamiczne polega na rozwiązywaniu problemów poprzez rozwiązanie podproblemów i pamiętanie wyników, aby uniknąć wielokrotnego rozwiązywania tych samych podproblemów.
 
 ### Problem plecakowy:
-Problem plecakowy polega na wybraniu przedmiotów o maksymalnej wartości, które zmieszczą się w plecaku o określonej pojemności.
+Problem plecakowy polega na wybraniu przedmiotów o maksymalnej wartości, które zmieszczą się w plecaku o określonej pojemności.Problem plecakowy jest jednym z klasycznych problemów optymalizacyjnych, w którym chcemy wybrać przedmioty o maksymalnej wartości, które zmieszczą się w plecaku o ograniczonej pojemności. Istnieją różne warianty tego problemu, ale jeden z najczęstszych to "0/1 problem plecakowy", gdzie każdy przedmiot można wybrać tylko raz (lub nie wybrać wcale).
+```
+def knapsack(weights, values, capacity):
+    n = len(weights)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
 
+    for i in range(1, n + 1):
+        for w in range(1, capacity + 1):
+            if weights[i - 1] <= w:
+                dp[i][w] = max(values[i - 1] + dp[i - 1][w - weights[i - 1]], dp[i - 1][w])
+            else:
+                dp[i][w] = dp[i - 1][w]
+
+    return dp[n][capacity]
+
+# Przykładowe użycie:
+weights = [2, 3, 4, 5]
+values = [3, 4, 5, 6]
+capacity = 5
+
+max_value = knapsack(weights, values, capacity)
+print("Maksymalna wartość, którą można umieścić w plecaku:", max_value)
+
+```
 ### Problem wydawania reszty:
-Problem wydawania reszty polega na znalezieniu najmniejszej liczby monet lub banknotów, które są potrzebne do wydania określonej kwoty
+Problem wydawania reszty polega na znalezieniu najmniejszej liczby monet lub banknotów, które są potrzebne do wydania określonej kwoty.
+Problem wydawania reszty polega na znalezieniu minimalnej liczby monet (lub banknotów) potrzebnych do wydania danej kwoty, używając dostępnych nominałów. Ten problem często występuje w codziennym życiu, np. przy obsłudze automatów, sklepów lub bankomatów
+```
+def wydaj_reszte(nominaly, kwota):
+    nominaly.sort(reverse=True)  # Sortujemy nominały malejąco
+    reszta = []
+    for nominal in nominaly:
+        while kwota >= nominal:
+            reszta.append(nominal)
+            kwota -= nominal
+    return reszta
 
+# Przykładowe użycie:
+nominaly = [200, 100, 50, 20, 10, 5, 2, 1]  # Dostępne nominały
+kwota = 348  # Kwota do wydania reszty
+
+reszta = wydaj_reszte(nominaly, kwota)
+print("Minimalna liczba nominałów potrzebna do wydania reszty:", len(reszta))
+print("Nominały wydane jako reszta:", reszta)
+
+```
 # W7. Listy jedno- i dwukierunkowe.
 ## Listy jednokierunkowe składają się z węzłów, z których każdy zawiera wartość oraz wskaźnik do następnego węzła.
 ### Zalety:
 
--prosta imolementacja
+-prosta implementacja
 
 -efektywna w dodawaniu i usuwaniu elementow na poczatku listy
 
