@@ -93,3 +93,22 @@ else: print("znaleziono nie ma")
 deleted=bst.cancel(12)
 
 print(f'ununieto {deleted}')
+
+
+# def height(node):
+#     if node is None:
+#         return -1
+#     else:
+#         left_height = height(node.left)
+#         right_height = height(node.right)
+#         return max(left_height, right_height) + 1
+# def print_tree(node,level=0):
+#     if node is not None:
+#         if level == 0:
+#             print(" "*level*height(node)*2 + str(node.id))
+#             level+=1
+#         else:
+#             print_tree(node.left, level - 1)
+#             print_tree(node.right , level + 1)
+
+# print_tree(bst)
