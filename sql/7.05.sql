@@ -213,3 +213,241 @@ begin
 		rollback transaction
 	end
 end
+
+
+-- partycjonowanie poziome
+--plega na podziale tabeli na mniejsze podzbiory w oparciu o wrtosci pewnej kolumny
+
+--utworz schemat partycjonowania dla tabeli sales.salesorderheader wg kolumny OrderDate
+--stworz f-cje partycjonowania
+--utworz nowa tabele partycjonowanie ktora bedzie przechowywac dane z salesorderheader
+--przenies dane z oryginalnej tabeli do nowej partycjonowanej
+
+CREATE PARTITION SalesOrderDatePF (datetime)
+AS RANGE RIGHT FOR VALUES ('2010-01-01','2011-01-01','2012-01-01','2013-01-01');
+--utworzenei funkcji partycjonowanej
+CREATE PARTITION SCHEME SalesOrderDatePS
+AS PARTITION SalesOrderDatePF
+TO ([PRIMARY],[PRIMARY],[PRIMARY],[PRIMARY],[PRIMARY]);
+
+--utworzenei nowej tabeli partycjonowanej
+CREATE TABLE Sales.SalesOrderHeader_Partitioned
+(
+	[SalesOrderID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[RevisionNumber] [tinyint] NOT NULL,
+	[OrderDate] [datetime] NOT NULL,
+	[DueDate] [datetime] NOT NULL,
+	[ShipDate] [datetime] NULL,
+	[Status] [tinyint] NOT NULL,
+	[OnlineOrderFlag] [dbo].[Flag] NOT NULL,
+	[SalesOrderNumber]  AS (isnull(N'SO'+CONVERT([nvarchar](23),[SalesOrderID]),N'*** ERROR ***')),
+	[PurchaseOrderNumber] [dbo].[OrderNumber] NULL,
+	[AccountNumber] [dbo].[AccountNumber] NULL,
+	[CustomerID] [int] NOT NULL,
+	[SalesPersonID] [int] NULL,
+	[TerritoryID] [int] NULL,
+	[BillToAddressID] [int] NOT NULL,
+	[ShipToAddressID] [int] NOT NULL,
+	[ShipMethodID] [int] NOT NULL,
+	[CreditCardID] [int] NULL,
+	[CreditCardApprovalCode] [varchar](15) NULL,
+	[CurrencyRateID] [int] NULL,
+	[SubTotal] [money] NOT NULL,
+	[TaxAmt] [money] NOT NULL,
+	[Freight] [money] NOT NULL,
+	[TotalDue]  AS (isnull(([SubTotal]+[TaxAmt])+[Freight],(0))),
+	[Comment] [nvarchar](128) NULL,
+	[rowguid] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_SalesOrderHeader_Partitioned] PRIMARY KEY CLUSTERED (SalesOrderID, OrderDate)
+) ON SalesOrderDatePS(OrderDate);
+
+--przeniesienie danych do nowej tabeli partycjonowanej
+INSERT INTO Sales.PK_SalesOrderHeader_Partitioned
+([RevisionNumber]
+,[OrderDate]
+,[DueDate]
+,[ShipDate]
+,[Status]
+,[OnlineOrderFlag]
+,[PurchaseOrderNumber]
+,[AccountNumber]
+,[CustomerID]
+,[SalesPersonID]
+,[TerritoryID]
+,[BillToAddressID]
+,[ShipToAddressID]
+,[ShipMethodID]
+,[CreditCardID]
+,[CreditCardApprovalCode]
+,[CurrencyRateID]
+,[SubTotal]
+,[TaxAmt]
+,[Freight]
+,[Comment]
+,[rowguid]
+,[ModifiedDate])
+
+SELECT [SalesOrderID]
+,[RevisionNumber]
+,[OrderDate]
+,[DueDate]
+,[ShipDate]
+,[Status]
+,[OnlineOrderFlag]
+,[SalesOrderNumber]
+,[PurchaseOrderNumber]
+,[AccountNumber]
+,[CustomerID]
+ ,[SalesPersonID]
+,[TerritoryID]
+,[BillToAddressID]
+,[ShipToAddressID]
+,[ShipMethodID]
+,[CreditCardID]
+,[CreditCardApprovalCode]
+,[CurrencyRateID]
+,[SubTotal]
+,[TaxAmt]
+,[Freight]
+,[TotalDue]
+,[Comment]
+,[rowguid]
+,[ModifiedDate]
+FROM [Sales].[SalesOrderHeader]
+
+
+
+
+
+
+
+
+
+
+
+-- Partycjonowanie pionowe
+-- podzial na mniejsze tabele w oparciu o grupy kolumn . podzial tabeli Person.person na dwie tabele w oparciu o grupy kolumn
+--TRESC 
+--utworz dwie nowe tabele, person.person_part1 i person.person_part2 aby przechowywac rozne grupy kolumn z tabeli person.person
+--przenies odpowiednie dane z oryginalnej tabeli do nowych partycjonowanych pionowo
+-- utworz widok person.person  łączocy obie partycjonowane pionowo tabele
+
+
+--utworzneie nowych tabel partycjonowanych pionowo
+use AdventureWorks2019;
+CREATE TABLE Person.Person_part1
+(
+	BusinessEntityID int NOT NULL,
+	FirstName nvarchar(50) NOR NULL
+	--pozostale kolumnt
+	CONSTRAINT PK_Person_Part1 PRIMARY KEY (BusinessEntityID)
+)
+
+CREATE TABLE Person.Person_part2
+(
+	BusinessEntityID int NOT NULL,
+	FirstName nvarchar(50) NOR NULL
+	--pozostale kolumnt
+	CONSTRAINT PK_Person_Part2 PRIMARY KEY (BusinessEntityID)
+	CONSTRAINT FK_Person_Part2 FOREIGN KEY (BusinessEntityID) REFERENCES Person.Person_part1(BusinessEntityID)
+)
+
+
+--przeniesienie danych 
+INSERT INTO Person.Person_part1(BusinessEntityID,EmployeeAddress,....)
+select BusinessEntityID,EmployeeAddress,PhoneNumber,....
+FROM Person.Person
+
+
+--utworzneie widoku laczacego
+CREATE VIEW Person.Person as
+SELECT
+	p1.BusinessEntityID,
+	p1.FirstName,
+	p1.LastName,
+	p1.EmployeeAddress,
+	p1.PhoneNumber,
+	.
+	.
+	.
+FROM Person.Person_part1 p1
+LEFT JOIN Person.Person_part2 p2 on p1.BusinessEntityID=p2.BusinessEntityID
+
+
+
+
+
+
+
+
+
+--Zadanie 3: Partycjonowanie Poziome według Regionu
+--Cel: Podziel tabelę Sales.SalesOrderHeader na partycje według kolumny TerritoryID.
+--Treść zadania:
+--Utwórz schemat partycjonowania dla tabeli Sales.SalesOrderHeader według kolumny TerritoryID.
+--Stwórz odpowiednią funkcję partycjonowania.
+--Utwórz nową tabelę partycjonowaną, która będzie przechowywać dane z tabeli Sales.SalesOrderHeader.
+--Przenieś dane z oryginalnej tabeli do nowej tabeli partycjonowanej.
+
+-- Kroki 1 i 2: Utwórz schemat partycjonowania i funkcję partycjonowania
+
+-- Utwórz schemat partycjonowania
+CREATE PARTITION SCHEME SalesPartitionScheme
+AS PARTITION SalesPartitionFunction
+TO ([PRIMARY], [Secondary]);
+
+-- Utwórz funkcję partycjonowania
+CREATE PARTITION FUNCTION SalesPartitionFunction (int)
+AS RANGE LEFT FOR VALUES (5, 10, 15, 20);
+
+-- Kroki 3 i 4: Utwórz nową tabelę partycjonowaną i przenieś dane
+
+-- Utwórz nową tabelę partycjonowaną
+CREATE TABLE Sales.SalesOrderHeader_Partitioned
+(
+    SalesOrderID int NOT NULL PRIMARY KEY,
+    RevisionNumber int NOT NULL,
+    OrderDate datetime NOT NULL,
+    DueDate datetime NOT NULL,
+    ShipDate datetime NULL,
+    Status int NOT NULL,
+    OnlineOrderFlag bit NOT NULL,
+    SalesOrderNumber nvarchar(25) NOT NULL,
+    PurchaseOrderNumber nvarchar(25) NULL,
+    AccountNumber nvarchar(15) NULL,
+    CustomerID int NULL,
+    SalesPersonID int NULL,
+    TerritoryID int NULL,
+    BillToAddressID int NOT NULL,
+    ShipToAddressID int NOT NULL,
+    ShipMethodID int NOT NULL,
+    CreditCardID int NULL,
+    CreditCardApprovalCode varchar(15) NULL,
+    CurrencyRateID int NULL,
+    SubTotal money NOT NULL,
+    TaxAmt money NOT NULL,
+    Freight money NOT NULL,
+    TotalDue money NOT NULL,
+    Comment nvarchar(max) NULL,
+    rowguid uniqueidentifier NOT NULL,
+    ModifiedDate datetime NOT NULL
+)
+ON SalesPartitionScheme(TerritoryID); -- Partycjonuj według TerritoryID
+
+-- Przenieś dane z oryginalnej tabeli do nowej tabeli partycjonowanej
+INSERT INTO Sales.SalesOrderHeader_Partitioned 
+(
+    SalesOrderID, RevisionNumber, OrderDate, DueDate, ShipDate, Status, OnlineOrderFlag, 
+    SalesOrderNumber, PurchaseOrderNumber, AccountNumber, CustomerID, SalesPersonID, 
+    TerritoryID, BillToAddressID, ShipToAddressID, ShipMethodID, CreditCardID, 
+    CreditCardApprovalCode, CurrencyRateID, SubTotal, TaxAmt, Freight, TotalDue, Comment, 
+    rowguid, ModifiedDate
+)
+SELECT 
+    SalesOrderID, RevisionNumber, OrderDate, DueDate, ShipDate, Status, OnlineOrderFlag, 
+    SalesOrderNumber, PurchaseOrderNumber, AccountNumber, CustomerID, SalesPersonID, 
+    TerritoryID, BillToAddressID, ShipToAddressID, ShipMethodID, CreditCardID, 
+    CreditCardApprovalCode, CurrencyRateID, SubTotal, TaxAmt, Freight, TotalDue, Comment, 
+    rowguid, ModifiedDate
+FROM Sales.SalesOrderHeader;
