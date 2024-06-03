@@ -889,10 +889,50 @@ ALTER COLUMN nazwaKolumny DROP MASKED
 GRANT UNMASK  ON nazwaTabeli(nazwaKolumny) FROM nazwaBazyDanych TO nazwaUsera
 
 REVOKE UNMASK ON nazwaTabeli(nazwaKolumny) FROM nazwaBazyDanych TO nazwaUsera
+# Procedury
 
+# Funkcje
 
+# Funcje tabelaryczne
+
+# Triggery
+
+# Zaawansowanie funkcje SQL
+
+## Funkcje okienkowe
+
+## Operatory ETL
+
+## Zapytania rekursywne
+
+# Przechowywanie danych i zarządzanie pamięci
+
+## Organizacja danych na dysku
+
+## Partycjonowanie danych
+
+# Replikacja i backup
+
+## strategie replikacji
+
+## Bakup i odzyskiwanie danych
+
+## Narzędzia i techniki backupu
+
+# NoSQL i relacyjne bazy danych
+
+## Porównanie modeli NoSQL i relacyjnych
+
+## Kiedy używać relacyjnych, a kiedy NoSQL
+
+## Systemy NoSQL
+
+# Big Data
 # ################################################################################################################################################
 #                                           ADMINISTRACJA
+
+# TEORIA
+
 # TWORZENIE UŻYTKOWNIKÓW
 ## TWORZENIE NOWYCH LOGINÓW
 CREATE LOGIN MyName WITH PASSWORD = 'YourPassword'; -- Tworzy nowe logowanie AdventureWorksLogin z hasłem
@@ -1007,3 +1047,6 @@ CONTROL SERVER - pelna kontrola nad serwerem
 ALTER ANY LOGIN - modyfikacja logowania dowolnego
 
 VIEW ANY DEFINITION -pozwala na wyswietlenie definicji wszystkich obiektow na serwerze, niezaleznie od bazy danych
+
+## Zapobieganie przed SQL Injection
+
