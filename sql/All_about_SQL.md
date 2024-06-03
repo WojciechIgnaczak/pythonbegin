@@ -1,3 +1,367 @@
+# 1. Wprowadzenie do Systemów Baz Danych (DBMS):
+Systemy baz danych (DBMS) są to narzędzia, które umożliwiają przechowywanie, zarządzanie i manipulowanie danymi. Są one wykorzystywane w różnych dziedzinach, takich jak biznes, nauka, administracja publiczna itp. DBMS umożliwiają użytkownikom tworzenie, aktualizowanie, odczytywanie i usuwanie danych w sposób zorganizowany i efektywny.
+
+Relacyjny Model Danych:
+Relacyjny model danych jest jednym z najbardziej popularnych modeli baz danych. W modelu tym dane są przechowywane w postaci tabel, gdzie każda tabela składa się z wierszy (rekordów) i kolumn (pól). Relacje między tabelami są reprezentowane za pomocą kluczy obcych i kluczy głównych. Model relacyjny jest elastyczny i umożliwia łatwe wykonywanie zapytań.
+
+Inne Modele Baz Danych:
+Hierarchiczny Model Danych: Dane są zorganizowane w postaci drzewa, gdzie każdy węzeł ma jeden rodzica i wiele dzieci. Ten model był popularny w latach 60. i 70., ale obecnie jest rzadziej stosowany.
+Sieciowy Model Danych: Rozbudowany model hierarchiczny, który pozwala na bardziej złożone relacje między rekordami poprzez wprowadzenie wielu rodziców dla danego węzła.
+Obiektowy Model Danych: Rozszerzenie relacyjnego modelu danych, które pozwala na przechowywanie obiektów w bazie danych. Obiekty mogą zawierać metody i właściwości, co jest użyteczne w programowaniu obiektowym.
+Model Dokumentowy: Dane są przechowywane w postaci dokumentów, na przykład w formacie JSON lub XML. Ten model jest często używany w aplikacjach webowych i NoSQL bazach danych.
+
+
+
+# 2. Modelowanie Pojęciowe: Model Związków-Encji (ER)
+## Encje:
+Encje reprezentują konkretne obiekty lub koncepcje, takie jak osoba, produkt, zamówienie, czy faktura.
+Każda encja jest reprezentowana jako prostokąt w diagramie ER, z nazwą encji wewnątrz prostokąta.
+Encje mogą mieć atrybuty, które opisują cechy encji, np. imię, nazwisko, cena.
+## Atrybuty:
+Atrybuty opisują właściwości encji i zawierają informacje na temat każdego rekordu w tabeli.
+Mogą być prostymi typami danych, takimi jak liczby całkowite, łańcuchy znaków, daty, lub bardziej złożonymi typami danych, takimi jak obrazy lub dokumenty.
+Atrybuty są reprezentowane jako elipsy w diagramie ER, z nazwą atrybutu wewnątrz elipsy.
+## Związki:
+Związki określają relacje między encjami.
+Mogą być jednokierunkowe lub obustronne, oraz binarne lub n-arnie (gdzie n > 2).
+Związki są reprezentowane jako linie łączące encje w diagramie ER, z etykietami określającymi naturę związku (np. "ma", "składa się z").
+## Transformacja z Modelu Pojęciowego do Relacyjnego
+Encje na Tabele:
+Każda encja w diagramie ER staje się tabelą w schemacie relacyjnym.
+Nazwa encji staje się nazwą tabeli, a jej atrybuty stają się kolumnami tabeli.
+Atrybuty na Kolumny:
+Atrybuty każdej encji stają się kolumnami w odpowiadających im tabelach.
+Każdy atrybut musi zostać przyporządkowany odpowiedniemu typowi danych, np. VARCHAR, INT, DATE, itp.
+
+Związki na Klucze Obce:
+Związki między encjami są reprezentowane za pomocą kluczy obcych w tabelach.
+Klucz obcy wskazuje na klucz główny innej tabeli, tworząc w ten sposób relację między nimi.
+
+## Normalizacja i Denormalizacja Schematu Relacyjnej Bazy Danych
+Normalizacja:
+Normalizacja to proces projektowania bazy danych w taki sposób, aby unikać redundancji danych i anomalii związanych z wprowadzaniem, aktualizacją i usuwaniem danych.
+Proces ten jest realizowany poprzez dzielenie tabel na mniejsze, bardziej znormalizowane tabele, aby uniknąć powtarzania tych samych informacji.
+Denormalizacja:
+Denormalizacja jest przeciwnym procesem do normalizacji, polegającym na dodawaniu redundancji danych w celu poprawy wydajności odczytu danych.
+Jest stosowana w przypadkach, gdy wymagane są szybkie zapytania czy raporty, a wydajność zapisu danych jest mniej istotna.
+
+### 1NF (First Normal Form)
+Definicja:
+Pierwsza postać normalna (1NF) jest pierwszym etapem normalizacji, który ma na celu eliminację wielowartościowych atrybutów oraz powtórzeń grup danych w pojedynczych rekordach.
+Aby spełnić warunki 1NF, każda komórka w tabeli musi przechowywać pojedynczą wartość, a nie zestawy wartości.
+Właściwości:
+Atomowe Atrybuty: Każda kolumna (atrybut) tabeli musi być atomowa, co oznacza, że ​​nie może przechowywać zestawu wartości ani struktur danych.
+Unikalne Nazwy Kolumn: Każda kolumna w tabeli musi mieć unikalną nazwę, a nie mogą występować powtarzające się kolumny.
+Przykład:
+Rozważmy tabelę o nazwie "Zamówienia" z kolumnami: ID_zamówienia, Produkty, Ilość, Klient. Ta tabela nie spełnia warunków 1NF, ponieważ kolumna "Produkty" może zawierać zestawy wartości (np. "telefon, laptop") dla jednego zamówienia.
+
+### 2NF (Second Normal Form)
+Definicja:
+Druga postać normalna (2NF) jest etapem normalizacji, w którym eliminowane są zależności częściowe od klucza głównego, czyli każda kolumna w tabeli musi bezpośrednio zależeć od klucza głównego.
+Właściwości:
+Spełnienie 1NF: Tabela musi już być w pierwszej postaci normalnej (1NF).
+Brak Zależności Częściowych: Każda niekluczowa kolumna musi być w pełni zależna od każdego klucza kandydującego w tabeli.
+Przykład:
+Rozważmy tabelę "Zamówienia" z kolumnami: ID_zamówienia, ID_produktu, Nazwa_produktu, Ilość. W tej tabeli ID_produktu jest kluczem częściowym, a kolumna "Nazwa_produktu" zależy tylko od ID_produktu, co oznacza, że tabela nie jest w 2NF.
+
+### 3NF (Third Normal Form)
+Definicja:
+Trzecia postać normalna (3NF) jest kolejnym etapem normalizacji, w którym eliminowane są zależności przekłamane, czyli każda niekluczowa kolumna musi być niezależna od innych niekluczowych kolumn w tej samej tabeli.
+Właściwości:
+Spełnienie 2NF: Tabela musi już być w drugiej postaci normalnej (2NF).
+Brak Zależności Przekłamanych: Każda niekluczowa kolumna musi być niezależna od innych niekluczowych kolumn w tej samej tabeli.
+Przykład:
+Rozważmy tabelę "Zamówienia" z kolumnami: ID_zamówienia, ID_klienta, Nazwa_klienta, Miasto_klienta. W tej tabeli kolumna "Miasto_klienta" zależy tylko od ID_klienta, a nie bezpośrednio od ID_zamówienia, co oznacza, że tabela nie jest w 3NF.
+
+Wdrożenie normalizacji od 1NF do 3NF pomaga w zapewnieniu spójności, integralności danych i unikaniu redundancji, co prowadzi do lepszego projektu bazy danych.
+
+
+
+# 3. DDL - język opisu danych. Tworzenie, modyfikacja i destrukcja poszczególnych obiektów bazy danych.
+## Tworzenie Obiektów Bazy Danych
+### Tabele:
+Tworzenie tabeli rozpoczyna się od komendy CREATE TABLE.
+Struktura tabeli jest definiowana za pomocą nazwy tabeli, listy kolumn i ich typów danych, a także dodatkowych opcji, takich jak klucze główne, ograniczenia integralności i indeksy.
+Przykład:
+
+CREATE TABLE Pracownicy (
+    ID INT PRIMARY KEY,
+    Imię VARCHAR(50),
+    Nazwisko VARCHAR(50),
+    Data_zatrudnienia DATE
+);
+
+### Indeksy:
+Indeksy służą do przyspieszania wyszukiwań w bazie danych.
+Tworzenie indeksu rozpoczyna się od komendy CREATE INDEX.
+Wskazujemy nazwę indeksu, tabelę oraz kolumny, na których ma być stworzony indeks.
+Przykład:
+
+CREATE INDEX idx_imię ON Pracownicy (Imię);
+
+### Widoki:
+Widoki są wirtualnymi tabelami, które są wynikiem zapytań SQL.
+Tworzenie widoku rozpoczyna się od komendy CREATE VIEW.
+Określamy nazwę widoku oraz zapytanie, na podstawie którego ma zostać utworzony.
+Przykład:
+
+CREATE VIEW Nowi_pracownicy AS
+SELECT * FROM Pracownicy WHERE Data_zatrudnienia > '2022-01-01';
+
+### Procedury:
+Procedury to zbiory instrukcji SQL, które mogą być wielokrotnie wykonywane.
+Tworzenie procedury rozpoczyna się od komendy CREATE PROCEDURE.
+Określamy nazwę procedury, listę parametrów (opcjonalnie) oraz ciało procedury.
+Przykład:
+
+CREATE PROCEDURE Dodaj_pracownika (IN imię VARCHAR(50), IN nazwisko VARCHAR(50))
+BEGIN
+    INSERT INTO Pracownicy (Imię, Nazwisko) VALUES (imię, nazwisko);
+END;
+
+
+
+## Modyfikacja Obiektów Bazy Danych
+### Tabele:
+Modyfikacja tabeli może polegać na dodawaniu nowych kolumn, zmianie typu danych kolumny, dodawaniu ograniczeń integralności, usuwaniu kolumn, itp.
+Do modyfikacji tabeli używamy komendy ALTER TABLE.
+Przykład:
+
+ALTER TABLE Pracownicy ADD COLUMN Stanowisko VARCHAR(100);
+
+### Indeksy:
+Modyfikacja indeksów może polegać na zmianie ich nazw, usuwaniu, zmianie typu indeksu, itp.
+W niektórych systemach można użyć komendy ALTER INDEX do modyfikacji indeksów, jednak nie jest to standardowa składnia w języku SQL.
+
+### Widoki:
+Modyfikacja widoków może polegać na zmianie ich definicji, zmianie nazwy, usuwaniu, itp.
+W niektórych systemach można użyć komendy ALTER VIEW do modyfikacji widoków, jednak nie jest to standardowa składnia w języku SQL.
+
+### Procedury:
+Modyfikacja procedur może polegać na zmianie ich definicji, dodawaniu lub usuwaniu instrukcji SQL, zmianie nazwy, itp.
+W niektórych systemach można użyć komendy ALTER PROCEDURE do modyfikacji procedur, jednak nie jest to standardowa składnia w języku SQL.
+
+
+
+## Destrukcja Obiektów Bazy Danych
+### Tabele:
+Usuwanie tabeli rozpoczyna się od komendy DROP TABLE.
+Po tej komendzie struktura i dane w tabeli zostaną trwale usunięte.
+Przykład:
+
+DROP TABLE Pracownicy;
+
+### Indeksy:
+Usuwanie indeksu rozpoczyna się od komendy DROP INDEX.
+Po tej komendzie indeks zostanie trwale usunięty.
+Przykład:
+
+DROP INDEX idx_imię ON Pracownicy;
+
+### Widoki:
+Usuwanie widoku rozpoczyna się od komendy DROP VIEW.
+Po tej komendzie widok zostanie trwale usunięty.
+Przykład:
+
+DROP VIEW Nowi_pracownicy;
+
+### Procedury:
+Usuwanie procedury rozpoczyna się od komendy DROP PROCEDURE.
+Po tej komendzie procedura zostanie trwale usunięta.
+Przykład:
+
+DROP PROCEDURE Dodaj_pracownika;
+
+### Podsumowanie
+Komendy DDL pozwalają na definiowanie struktury bazy danych, tworzenie nowych obiektów, ich modyfikację oraz usuwanie. Zapewniają one dużą elastyczność i kontrolę nad bazą danych, umożliwiając dostosowywanie jej do zmieniających się wymagań biznesowych.
+
+
+
+# 4.DML - język manipulowania danymi. Pojęcie transakcji. Zarządzanie transakcjami. Integralność́ danych, zarządzanie więzami integralności. Indeksy i optymalizacja bazy danych. 
+
+
+DML (Data Manipulation Language) to podzbiór języka SQL (Structured Query Language), który umożliwia manipulowanie danymi w bazie danych. Pozwala na dodawanie, usuwanie, aktualizację i wybieranie danych w tabelach.
+
+### Podstawowe operacje DML:
+INSERT: Wstawianie nowych danych do tabeli.
+SELECT: Wybieranie danych z tabeli.
+UPDATE: Aktualizowanie istniejących danych w tabeli.
+DELETE: Usuwanie danych z tabeli.
+Przykłady:
+
+-- INSERT
+INSERT INTO Pracownicy (Imię, Nazwisko, Stanowisko) VALUES ('Jan', 'Kowalski', 'Manager');
+
+-- SELECT
+SELECT * FROM Pracownicy WHERE Stanowisko = 'Manager';
+
+-- UPDATE
+UPDATE Pracownicy SET Stanowisko = 'Dyrektor' WHERE ID = 1;
+
+-- DELETE
+DELETE FROM Pracownicy WHERE ID = 1;
+
+
+### Pojęcie Transakcji
+Definicja:
+Transakcja to sekwencja operacji wykonywanych w bazie danych, która tworzy logiczną jednostkę pracy.
+Transakcje są atomowe, co oznacza, że ​​są wykonywane jako całość lub w ogóle nie są wykonywane.
+Transakcje zapewniają spójność i integralność danych w bazie.
+
+Właściwości transakcji:
+Atomowość: Transakcja jest wykonywana jako jedna, niepodzielna operacja.
+Spójność: Po zakończeniu transakcji baza danych przechodzi z jednego spójnego stanu do innego.
+Izolacja: Transakcje są izolowane od siebie, zmiany dokonane przez jedną transakcję nie są widoczne dla innych transakcji do momentu ich zakończenia.
+Trwałość: Po zakończeniu transakcji zmiany są trwale zapisywane w bazie danych, nawet w przypadku awarii systemu.
+Zarządzanie Transakcjami
+Rozpoczęcie transakcji:
+Transakcję rozpoczynamy za pomocą instrukcji BEGIN TRANSACTION lub START TRANSACTION.
+Zakończenie transakcji:
+Transakcję zamykamy za pomocą instrukcji COMMIT, aby potwierdzić zmiany i zatwierdzić je w bazie danych.
+W przypadku niepowodzenia transakcji możemy użyć instrukcji ROLLBACK, aby cofnąć zmiany i przywrócić bazę danych do stanu poprzedniego.
+
+Przykład:
+
+BEGIN TRANSACTION;
+UPDATE Pracownicy SET Stanowisko = 'Manager' WHERE ID = 1;
+COMMIT;
+
+### Integralność Danych i Zarządzanie Więzami Integralności
+Definicja:
+Integralność danych to stan, w którym dane w bazie są spójne, dokładne i zgodne z określonymi regułami.
+Więzy integralności to reguły, które muszą być spełnione, aby zapewnić integralność danych.
+
+### Typy więzów integralności:
+Klucz główny (Primary Key): Zapewnia unikalność wartości w kolumnie, identyfikując tym samym każdy rekord w tabeli.
+Klucz obcy (Foreign Key): Zapewnia spójność referencyjną między dwiema tabelami, ograniczając wartości w jednej kolumnie, aby odpowiadały wartościom w innej kolumnie w innej tabeli.
+Więzy unikalności (Unique Constraint): Zapewnia, że ​​wartości w określonej kolumnie są unikalne.
+Więzy check (Check Constraint): Określa warunki, które dane muszą spełniać.
+
+## Indeksy w Bazach Danych
+Indeksy są strukturami danych stosowanymi w bazach danych w celu przyspieszenia operacji wyszukiwania, sortowania i łączenia danych. Działają podobnie jak indeksy w książce - pomagają znaleźć potrzebne dane szybciej, skracając czas wyszukiwania.
+
+### Rodzaje Indeksów:
+
+#### Indeks Jednokolumnowy:
+
+Tworzony jest na jednej kolumnie tabeli.
+Przyspiesza wyszukiwanie danych w oparciu o tę konkretną kolumnę.
+Jest najczęściej używany w bazach danych.
+
+
+#### Indeks Wielokolumnowy:
+
+Tworzony jest na kilku kolumnach tabeli.
+Umożliwia przyspieszenie zapytań, które obejmują te kolumny.
+
+### Indeks Unikalny:
+
+Zapewnia unikalność wartości w kolumnie lub zestawie kolumn.
+Uniemożliwia wstawianie duplikatów wartości, które już istnieją w indeksowanej kolumnie lub zestawie kolumn.
+
+### Indeks Kompozytowy:
+
+Jest to rodzaj indeksu wielokolumnowego, który jest tworzony na kombinacji kilku kolumn.
+Przyspiesza wyszukiwanie i łączenie danych na podstawie tych kolumn.
+
+### Indeks Pełnotekstowy:
+
+Wykorzystywany jest w przypadku pełnotekstowych wyszukiwań, np. gdy potrzebne jest wyszukanie frazy lub słów kluczowych w tekście.
+Zazwyczaj stosowany jest w przypadku dużych zbiorów danych tekstowych.
+
+
+### Korzyści z Używania Indeksów:
+Skrócenie Czasu Wyszukiwania: Operacje wyszukiwania danych są wykonywane szybciej, co przyspiesza działanie aplikacji korzystającej z bazy danych.
+
+Optymalizacja Zapytań: Indeksy mogą optymalizować wykonywane zapytania, co prowadzi do efektywniejszego korzystania z zasobów bazy danych.
+
+Poprawa Wydajności Aplikacji: Dzięki szybszym operacjom wyszukiwania i sortowania danej aplikacji staje się bardziej responsywna i wydajna.
+
+Redukcja Zużycia Zasobów: Pomimo zwiększonej ilości pamięci zajmowanej przez indeksy, korzyści płynące z szybszych operacji mogą przewyższać te koszty.
+
+### Kiedy Stosować Indeksy:
+Indeksy powinny być stosowane na kolumnach, które są często używane w operacjach wyszukiwania, sortowania lub łączenia danych.
+Ważne jest unikanie nadmiernego indeksowania, ponieważ zbyt wiele indeksów może spowolnić działanie bazy danych podczas operacji wstawiania, aktualizacji lub usuwania danych.
+
+### Optymalizacja Indeksów:
+Regularna Analiza Wydajności: Regularna analiza wydajności indeksów pozwala na identyfikację i usuwanie zbędnych lub mało wykorzystywanych indeksów.
+Tworzenie Indeksów Tam, Gdzie To Konieczne: Unikaj nadmiernego tworzenia indeksów i stosuj je tam, gdzie faktycznie są potrzebne.
+Monitorowanie Zapytań: Monitorowanie zapytań pozwala na identyfikację tych, które mogą wymagać dodatkowych indeksów lub optymalizacji istniejących.
+Uwzględnienie Rozmiaru Bazy Danych: W dużych bazach danych indeksy mogą być kluczowe dla wydajności, ale w małych bazach danych mogą powodować nadmierną złożoność i opóźnienia.
+Indeksy są ważnym narzędziem w optymalizacji wydajności baz danych. Jednak ich nadmiar lub nieodpowiednie zastosowanie może prowadzić do problemów z wydajnością. Dlatego ważne jest zrozumienie ich zastosowań, rodzajów i wpływu na wydajność systemu.
+
+
+
+
+# 5.Język SQL (m.in.: projekcja, selekcja, grupowanie, sortowanie, połączenie, suma, iloczyn, różnica, podzapytania, zapytania skorelowane).
+## 1. Projekcja:
+Projekcja w języku SQL polega na wybieraniu określonych kolumn z tabeli lub wyniku zapytania. Jest to operacja wyświetlania tylko tych danych, które są potrzebne dla danego zadania. Może obejmować pojedyncze kolumny lub wyrażenia, które wyliczają wartości na podstawie danych.
+
+Przykład:
+
+SELECT imie, nazwisko FROM pracownicy;
+
+## 2. Selekcja:
+Selekcja, znana również jako klauzula WHERE, służy do wybierania wierszy z tabeli, które spełniają określone kryteria. Pozwala na filtrowanie danych na podstawie warunków określonych przez użytkownika.
+
+Przykład:
+
+SELECT * FROM produkty WHERE cena > 100;
+
+## 3. Grupowanie:
+Grupowanie w języku SQL pozwala na łączenie wierszy z tabeli na podstawie wartości określonych kolumn, a następnie wykonywanie operacji na każdej grupie. Najczęściej używane są funkcje agregujące, takie jak SUM, AVG, COUNT, MIN, MAX.
+
+Przykład:
+
+SELECT kategoria, COUNT(*) AS liczba_produktow FROM produkty GROUP BY kategoria;
+
+## 4. Sortowanie:
+Sortowanie pozwala na uporządkowanie wyników zapytania według wartości określonej kolumny lub kolumn. Można sortować dane rosnąco (ASC) lub malejąco (DESC).
+
+Przykład:
+
+SELECT * FROM klienci ORDER BY nazwisko ASC;
+
+## 5. Połączenie:
+Połączenie w języku SQL umożliwia łączenie danych z dwóch lub więcej tabel na podstawie określonych warunków. Najczęściej stosowane są operatory JOIN, takie jak INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN.
+
+Przykład (INNER JOIN):
+
+SELECT pracownicy.imie, dzialy.nazwa FROM pracownicy INNER JOIN dzialy ON pracownicy.dzial_id = dzialy.id;
+
+## 6. Operacje zbiorowe:
+Operacje zbiorowe w SQL pozwalają na wykonywanie operacji na zbiorach danych, takich jak suma, iloczyn, różnica. Pozwalają na porównywanie i łączenie danych z różnych tabel.
+
+Przykład (SUM):
+
+SELECT SUM(cena) FROM zamowienia;
+
+## 7. Podzapytania:
+Podzapytania pozwalają na osadzanie jednego zapytania wewnątrz innego zapytania. Mogą być używane do wykonywania bardziej złożonych operacji, które wymagają danych z innych tabel lub wyników innych zapytań.
+
+Przykład:
+
+SELECT imie, nazwisko FROM pracownicy WHERE id IN (SELECT pracownik_id FROM projekty WHERE status = 'aktywny');
+
+## 8. Zapytania skorelowane:
+Zapytania skorelowane są rodzajem podzapytań, w których zapytanie wewnętrzne odwołuje się do tabeli z zapytania zewnętrznego. Są używane do wykonywania bardziej zaawansowanych operacji, które wymagają dostępu do danych z obu zapytań.
+
+Przykład:
+
+SELECT nazwisko FROM pracownicy p WHERE EXISTS (SELECT * FROM projekty WHERE pracownik_id = p.id);
+Rozumienie różnych aspektów języka SQL jest kluczowe dla efektywnego korzystania z baz danych. Poprawne stosowanie tych operacji pozwala na efektywne manipulowanie danymi i wykonywanie zaawansowanych operacji analitycznych.
+
+
+# 6.
+# DB-DML,DDL,dcl.tcl
+Języki SQL
+DDL-data definicion language         DML-data modification language         TCL         DQL             DCL 
+create                              insert                                  commit     select from      grant
+drop                                update                                  rollback                    revolk
+alter                               delete
+truncate
+
+
 # KOLEJNOSC WYKONYWANIA DZIAŁAŃ W SQL
 SELECT...FROM...
 JOIN...
@@ -320,6 +684,17 @@ SELECT column1, COUNT(*) AS count
 FROM table_name
 GROUP BY column1
 HAVING COUNT(*) > (SELECT AVG(count) FROM (SELECT COUNT(*) AS count FROM table_name GROUP BY column1) AS subquery);
+
+# ZAPYTANIA SKORELOWANE
+-- zapytanie skorelowane
+SELECT CustomerID, CompanyName, 
+(
+	SELECT COUNT(OrderID) 
+	FROM dbo.Orders as O
+	WHERE o.CustomerID = C.CustomerID
+
+) as LiczbaZlecen
+FROM dbo.Customers as C
 
 # ALIASY
 SELECT Nazwa_Kolumny1 alias, Nazwa_Kolumny2 AS alias FROM Nazwa_Tabeli;
