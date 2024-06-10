@@ -31,7 +31,8 @@ root.right.right.right.right=Node(30)
 # root.right.right.right.right.right=Node(30)
 #print("Wysokość :", height(root)) 
 
-#sprawdx czy drzewo jest zbalansowane. jest zbalansowane jesli dla kazdefo wezla roznica wysokosci jego poddrzew lewego i prawego nie przekracza 1
+#sprawdx czy drzewo jest zbalansowane. jest zbalansowane jesli dla kazdefo wezla roznica wysokosci jego poddrzew lewego i 
+#prawego nie przekracza 1
 def balance(node):
     if node is None:
         return True
